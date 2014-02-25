@@ -246,6 +246,229 @@ public class TimetableController {
 		save();
 
 	}
+	
+	public boolean editTt(int id) {
+		boolean isint = false;
+		
+		Timetable t = new Timetable();
+		boolean found = false;
+		for (Timetable ti : tt) {
+			if (ti.getTimetable_id() == id) {
+				t = ti;
+				tt.remove(ti);
+				found = true;
+			}
+		}
+		if (!found) {
+			return false;
+		}
+		
+		Room rm = null;
+		String ans;
+
+		while (!isint) {
+			cc.viewClasses();
+			System.out.println("Please choose a class?");
+			ans = scan.nextLine();
+			if (isInteger(ans)) {
+				t.setClass_id(Integer.parseInt(ans));
+				isint = true;
+			} else {
+				System.out.println("Invalid input. Please try again");
+			}
+
+		}
+
+		isint = false;
+
+		while (!isint) {
+			coc.viewCourse();
+			System.out.println("Please choose a course?");
+			ans = scan.nextLine();
+			if (isInteger(ans)) {
+				t.setCourse_id(Integer.parseInt(ans));
+				isint = true;
+			} else {
+				System.out.println("Invalid input. Please try again");
+			}
+
+		}
+
+		isint = false;
+
+		while (!isint) {
+			rc.viewRoom();
+			System.out.println("Please choose a room?");
+			ans = scan.nextLine();
+			if (isInteger(ans)) {
+				t.setClass_id(Integer.parseInt(ans));
+				rm = rc.getRoom(Integer.parseInt(ans));
+				isint = true;
+
+				boolean isinta = false;
+
+				while (isinta) {
+					System.out
+							.println("Please enter the maximum number of student for this course?");
+					ans = scan.nextLine();
+					if (isInteger(ans)
+							&& Integer.parseInt(ans) <= rm.getCapacity()) {
+						t.setLecturer_id(Integer.parseInt(ans));
+						isinta = true;
+					} else {
+						System.out.println("Invalid input. Please try again");
+					}
+
+				}
+
+			} else {
+				System.out.println("Invalid input. Please try again");
+			}
+
+		}
+
+		isint = false;
+
+		while (!isint) {
+			System.out.println("Please enter the start time?");
+			ans = scan.nextLine();
+			if (isInteger(ans)) {
+				if (ans.length() == 4) {
+					t.setStart_time(ans);
+					isint = true;
+				} else {
+					System.out.println("Invalid input. Please try again");
+				}
+			} else {
+				System.out.println("Invalid input. Please try again");
+			}
+
+		}
+		isint = false;
+
+		while (!isint) {
+			System.out.println("Please enter the end time?");
+			ans = scan.nextLine();
+			if (isInteger(ans)) {
+				if (ans.length() == 4) {
+					t.setEnd_time(ans);
+					isint = true;
+				} else {
+					System.out.println("Invalid input. Please try again");
+				}
+			} else {
+				System.out.println("Invalid input. Please try again");
+			}
+
+		}
+
+		isint = false;
+
+		while (!isint) {
+			System.out.println("Please enter the date? (DDMMYY)");
+			ans = scan.nextLine();
+			if (isInteger(ans)) {
+				if (ans.length() == 6) {
+					t.setDate(ans);
+					isint = true;
+				} else {
+					System.out.println("Invalid input. Please try again");
+				}
+			} else {
+				System.out.println("Invalid input. Please try again");
+			}
+
+		}
+
+		isint = false;
+
+		while (!isint) {
+			System.out.println("Is this complusory? (Y | N)");
+			ans = scan.nextLine();
+			if (ans.equals("Y") || ans.equals("N")) {
+				t.setIs_compulsory(ans);
+				isint = true;
+			} else {
+				System.out.println("Invalid input. Please try again");
+			}
+
+		}
+
+		isint = false;
+
+		while (!isint) {
+			System.out.println("Do you require a tutor? (yes | no)");
+			ans = scan.nextLine();
+			if (ans.equals("yes")) {
+				isint = true;
+				boolean isinta = false;
+				while (!isinta) {
+					tc.viewTutor();
+					System.out.println("Enter the number of the tutor");
+					ans = scan.nextLine();
+					if (isInteger(ans)) {
+						t.setRequire_tutor(Integer.parseInt(ans));
+						isinta = true;
+					} else {
+						System.out.println("Invalid input. Please try again");
+					}
+
+				}
+			} else if (ans.equals("no")) {
+				isint = true;
+			} else {
+				System.out.println("Invalid input. Please try again");
+			}
+
+		}
+
+		isint = false;
+
+		while (!isint) {
+			lc.viewLect();
+			System.out.println("Please choose a lecturer?");
+			ans = scan.nextLine();
+			if (isInteger(ans)) {
+				t.setLecturer_id(Integer.parseInt(ans));
+				isint = true;
+			} else {
+				System.out.println("Invalid input. Please try again");
+			}
+
+		}
+
+		System.out.println("Do you have any remarks?");
+		ans = scan.nextLine();
+		t.setRemarks(ans);
+		t.setTimetable_id(id);
+		tt.add(t);
+		System.out.println("Time Slot added");
+		save();
+		
+		return true;
+
+	}
+
+	public boolean contain(int id) {
+		for (Timetable t : tt) {
+			if (t.getTimetable_id() == id) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	public void removeTt(int id) {
+		for (Timetable t : tt) {
+			if (t.getTimetable_id() == id) {
+				tt.remove(t);
+				break;
+			}
+		}
+		save();
+	}
+
 
 	public void save() {
 		String url = "/Users/Derrick/Documents/Programming/Java/CourseAllocation/Database/timetable.csv";

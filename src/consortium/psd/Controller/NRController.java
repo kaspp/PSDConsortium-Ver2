@@ -155,7 +155,6 @@ public class NRController {
 				Map<Student, String> mapKey = p.getMap();
 				for (Student stu : keys) {
 					writer.append(p.getName() + "," + stu.getUser_id() + "," + p.getCourse() + "," + p.getdate() + "," + mapKey.get(stu));
-					System.out.println(p.getName() + "," + stu.getUser_id() + "," + p.getCourse() + "," + p.getdate() + "," + mapKey.get(stu));
 					writer.append("\n");
 				}
 			}
