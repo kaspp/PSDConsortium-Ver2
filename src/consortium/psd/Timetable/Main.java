@@ -43,7 +43,27 @@ public class Main {
 			switch (c) {
 			case 1:
 				boolean flag = true;
-				System.out.println("Jason portion");
+				boolean notint = true;
+				
+				while (flag) {
+					tc.viewTt();
+					System.out
+							.println("Which timetable do you want to view. Key 0 to exit");
+					String course = sc.nextLine();
+					if (isInteger(course)) {
+						if (tc.contain(Integer.parseInt(course)) && (Integer.parseInt(course) != 0)) {
+		
+								tc.viewTt(Integer.parseInt(course));
+							
+						} else if (Integer.parseInt(course) == 0) {
+							flag = false;
+						} else {
+							System.out.println("Value out of bound");
+						}
+					}
+				}
+				
+				
 				break;
 
 			case 2:
@@ -52,7 +72,7 @@ public class Main {
 
 			case 3:
 
-				boolean notint = true;
+				notint = true;
 			
 				while (notint) {
 					tc.viewTt();
@@ -104,7 +124,23 @@ public class Main {
 			switch (c) {
 			case 1:
 				boolean flag = true;
-				System.out.println("Jason portion");
+				while (flag) {
+					tc.viewTt();
+					System.out
+							.println("Which timetable do you want to view. Key 0 to exit");
+					String course = sc.nextLine();
+					if (isInteger(course)) {
+						if (tc.contain(Integer.parseInt(course)) && (Integer.parseInt(course) != 0)) {
+		
+								tc.viewTt(Integer.parseInt(course));
+							
+						} else if (Integer.parseInt(course) == 0) {
+							flag = false;
+						} else {
+							System.out.println("Value out of bound");
+						}
+					}
+				}
 				break;
 
 			case 0:
@@ -123,7 +159,23 @@ public class Main {
 
 			case 1:
 				boolean flag = true;
-				System.out.println("Jason portion");
+				while (flag) {
+					tc.viewTt();
+					System.out
+							.println("Which timetable do you want to view. Key 0 to exit");
+					String course = sc.nextLine();
+					if (isInteger(course)) {
+						if (tc.contain(Integer.parseInt(course)) && (Integer.parseInt(course) != 0)) {
+		
+								tc.viewTt(Integer.parseInt(course));
+							
+						} else if (Integer.parseInt(course) == 0) {
+							flag = false;
+						} else {
+							System.out.println("Value out of bound");
+						}
+					}
+				}
 				break;
 
 			case 0:
@@ -142,7 +194,23 @@ public class Main {
 			switch (c) {
 			case 1:
 				boolean flag = true;
-				System.out.println("Jason portion");
+				while (flag) {
+					tc.viewTt();
+					System.out
+							.println("Which timetable do you want to view. Key 0 to exit");
+					String course = sc.nextLine();
+					if (isInteger(course)) {
+						if (tc.contain(Integer.parseInt(course)) && (Integer.parseInt(course) != 0)) {
+		
+								tc.viewTt(Integer.parseInt(course));
+							
+						} else if (Integer.parseInt(course) == 0) {
+							flag = false;
+						} else {
+							System.out.println("Value out of bound");
+						}
+					}
+				}
 				break;
 
 			case 0:
