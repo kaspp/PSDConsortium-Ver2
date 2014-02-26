@@ -6,10 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.jbehave.core.annotations.Given;
+
 import consortium.psd.Object.Room;
 
 public class RoomController {
 
+	
 	private ArrayList<Room> room = new ArrayList<Room>();
 
 	public RoomController() {
@@ -17,12 +20,14 @@ public class RoomController {
 
 	}
 
+	
 	public void addRoom(String name, String location, int capacity) {
 		int id = room.size();
 		room.add(new Room(id, name, location, capacity));
 		save();
 	}
 
+	
 	public Room getRoom(int id) {
 		for (Room rm : room) {
 			if (rm.getId() == id){
@@ -77,6 +82,7 @@ public class RoomController {
 	}
 
 	public void save() {
+		
 		String url = "/Users/Derrick/Documents/Programming/Java/PSDConsortium/room.csv";
 		try {
 
@@ -96,6 +102,7 @@ public class RoomController {
 		}
 	}
 
+	
 	public void initData() {
 		BufferedReader br = null;
 		try {

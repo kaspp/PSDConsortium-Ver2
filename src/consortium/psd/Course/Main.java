@@ -2,6 +2,8 @@ package consortium.psd.Course;
 
 import java.util.Scanner;
 
+import org.jbehave.core.annotations.Given;
+
 import consortium.psd.Controller.CourseController;
 import consortium.psd.Database.Database;
 import consortium.psd.Object.User;
@@ -14,6 +16,7 @@ public class Main {
 	private static boolean exit = false;
 	private static Database db = new Database();
 
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -37,7 +40,8 @@ public class Main {
 			}
 		}
 	}
-
+	
+	
 	public static void doMenu(String type, int c) {
 		if (type.equals("admin")) {
 
@@ -151,6 +155,17 @@ public class Main {
 				}
 				break;
 
+			case 5:
+				System.out.println("Please enter the path of the file you wish to import.");
+				String ans = sc.nextLine();
+				if (ans.equals(null) || ans.equals("")) {
+					System.err.println("Process cannot be accomplished");
+				} else {
+					cc.importData(ans);
+				}
+				
+				
+				break;
 			case 0:
 				exit = true;
 				break;
@@ -284,6 +299,7 @@ public class Main {
 			System.out.println("2.\t Add Course");
 			System.out.println("3.\t Edit Course Detail");
 			System.out.println("4.\t Delete Course");
+			System.out.println("5.\t Import Course");
 			System.out.println("0.\t Logout");
 
 		} else if (type.equals("lecturer")) {
@@ -302,6 +318,7 @@ public class Main {
 		}
 	}
 
+	
 	public static boolean doLogin() {
 
 		int count = 3;

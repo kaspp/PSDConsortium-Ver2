@@ -27,7 +27,7 @@ public class CourseController {
 			if (p.getId() == id) {
 				p.setName(name);
 				p.setType(type);
-			
+
 			}
 		}
 		save();
@@ -49,7 +49,7 @@ public class CourseController {
 			FileWriter writer = new FileWriter(url);
 
 			for (Course p : c) {
-				writer.append(p.getId() + "," + p.getName() +","+ p.getType());
+				writer.append(p.getId() + "," + p.getName() + "," + p.getType());
 				writer.append("\n");
 			}
 
@@ -60,18 +60,18 @@ public class CourseController {
 			System.err.println("Unable to save");
 		}
 	}
-	
+
 	public void viewCourse() {
-		
+
 		for (Course p : c) {
 			System.out.println(p.getId() + ".\t" + p.getName());
 		}
 	}
-	
+
 	public int getSize() {
 		return c.size();
 	}
-	
+
 	public Course getCourse(int id) {
 		for (Course p : c) {
 			if (p.getId() == id) {
@@ -80,7 +80,7 @@ public class CourseController {
 		}
 		return null;
 	}
-	
+
 	public void viewCourse(int id) {
 		for (Course p : c) {
 			if (p.getId() == id) {
@@ -91,6 +91,41 @@ public class CourseController {
 				System.out.println("======================================");
 			}
 		}
+	}
+
+	public boolean importData(String url) {
+		BufferedReader br = null;
+		try {
+
+			/*
+			 * Reading all the classes
+			 */
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader(url));
+			while ((sCurrentLine = br.readLine()) != null) {
+				String[] temp = sCurrentLine.split(",");
+				if (isInteger(temp[0])) {
+					c.add(new Course(Integer.parseInt(temp[0]), temp[1],
+							temp[2]));
+				}
+
+			}
+
+		} catch (IOException e) {
+			System.err
+					.println("Wrong path name, please try again.");
+			return false;
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException ex) {
+				System.err.println("Unable to do process");
+				return false;
+			}
+		}
+		
+		return true; 
 	}
 
 	public void initData() {
