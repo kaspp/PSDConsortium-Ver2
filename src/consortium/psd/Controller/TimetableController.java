@@ -18,6 +18,7 @@ public class TimetableController {
 	RoomController rc = new RoomController();
 	LecturerController lc = new LecturerController();
 	TutorController tc = new TutorController();
+	StudentController sc = new StudentController();
 	Scanner scan = new Scanner(System.in);
 
 	public TimetableController() {
@@ -64,6 +65,7 @@ public class TimetableController {
 		boolean isint = false;
 		Timetable t = new Timetable();
 		Room rm = null;
+		int clas;
 		String ans;
 
 		while (!isint) {
@@ -72,6 +74,7 @@ public class TimetableController {
 			ans = scan.nextLine();
 			if (isInteger(ans)) {
 				t.setClass_id(Integer.parseInt(ans));
+				clas = Integer.parseInt(ans);
 				isint = true;
 			} else {
 				System.out.println("Invalid input. Please try again");

@@ -71,6 +71,17 @@ public class CourseController {
 	public int getSize() {
 		return c.size();
 	}
+	
+	public int courseID (String name) {
+		
+		for (Course p : c) {
+			if (p.getName().equals(name)) {
+				return p.getId();
+			}
+		}
+		
+		return 0;
+	}
 
 	public Course getCourse(int id) {
 		for (Course p : c) {

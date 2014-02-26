@@ -5,160 +5,87 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Scanner;
 
-import consortium.psd.Object.Attendance;
+import consortium.psd.Object.Classes;
 import consortium.psd.Object.Student;
 
 public class NRController {
 
-	ClassController cc = new ClassController();
 	StudentController sc = new StudentController();
+	ClassController cc = new ClassController();
 	CourseController coc = new CourseController();
-	ArrayList<Attendance> a = new ArrayList<Attendance>();
-	Scanner scan = new Scanner(System.in);
+	ArrayList<String> classkeys = new ArrayList<String>();
+	ArrayList<String> courseKeys = new ArrayList<String>();
+	Map<String, ArrayList<Student>> classlink = new LinkedHashMap<String, ArrayList<Student>>();
+
+	Map<String, String> courseLink = new LinkedHashMap<String, String>();
 
 	public NRController() {
 		initData();
 	}
-	
-	public int getSize() {
-		return a.size();
+
+	public void createNewClass(int clas_id, ArrayList<Student> st, int cour_id) {
+		String cla = cc.getClas(clas_id);
+		classkeys.add(cla);
+		classlink.put(cla, st);
+		courseKeys.add(coc.getCourse(cour_id).getName());
+		courseLink.put(coc.getCourse(cour_id).getName(), cla);
+
+	}
+
+	public boolean checkStudent(int stu_id, int cla_id) {
+
+		String key = cc.getClas(cla_id);
+		ArrayList<Student> stu = classlink.get(key);
+		Student that = sc.getStudent(stu_id);
+
+		for (Student temp : stu) {
+			if (sc.checkStu(temp, that)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void print() {
-		for (Attendance k : a) {
-			k.printAttendance();
+		System.out.println("Print");
+		for (String co : courseKeys) {
+
+			String classes = courseLink.get(co);
+			ArrayList<Student> students = classlink.get(classes);
+			for (Student k : students) {
+
+				System.out.println(classes + "," + k.getFullname()
+						+ "," + co);
+				
+
+			}
+			
 			System.out.println();
+
 		}
 
 	}
 
-	public void viewAtt() {
-		for (Attendance temp : a) {
-			System.out.println((temp.getid() + 1) + ".\t" + cc.getClas(temp.getName()) + "\t"
-					+ coc.getCourse(temp.getCourse()).getName() + "\t" + temp.getdate());
-
-		}
-	}
-	
-	public void viewAtt(int id) {
-		for (Attendance temp : a) {
-			if (temp.getid() == (id-1)) {
-				temp.printAttendance();
-				break;
-			}
-		}
-		
-	}
-
-	public void markAtt(int id) {
-		Attendance k = a.get(id - 1);
-		ArrayList<Student> keys = k.getKeys();
-		for (Student all : keys) {
-			boolean flag = false;
-			while (!flag) {
-				System.out.println("Is " + all.getFullname() + " here?");
-				String ans = scan.nextLine();
-				if (ans.equals("yes")) {
-					flag = true;
-					k.markPresent(all);
-				} else if (ans.equals("no")) {
-					flag = true;
-					k.markAbsent(all);
-				} else {
-					System.out.println("Invalid input, please try again.");
-				}
-			}
-		}
-		save();
-
-	}
-
-	public void checkAbs() {
-		for (Attendance k : a) {
-			ArrayList<Student> temp = k.getKeys();
-			int count = 0, nm = 0;
-			Map<Student, String> tempMap = k.getMap();
-			System.out.println("Class:\t" + cc.getClas(k.getName()));
-			System.out.println("Course:\t" + coc.getCourse(k.getCourse()));
-			for (Student s : temp) {
-				String mark = tempMap.get(s);
-				if (mark == null || mark.equals("null")) {
-
-					nm++;
-				} else if (mark.equals("N")) {
-					System.out.println(s.getFullname());
-					count++;
-				}
-			}
-			if (count == 0 && nm == 0) {
-				System.out.println("There is no absentee");
-			} else if (nm > 0) {
-				System.out.println("There are " + nm
-						+ " student's attendance not marked.");
-			}
-			System.out.println();
-		}
-	}
-
-	public boolean tabulate(int clas, int u, int c, String d, String mark) {
-
-		if (cc.getClas(clas) == null) {
-			System.err.println("Class not found!");
-			return false;
-
-		}
-
-		if (sc.getStudent(u) == null) {
-			System.err.println("Student not found!");
-			return false;
-
-		}
-
-		if (coc.getCourse(c) == null) {
-			System.err.println("Course not found!");
-			return false;
-		}
-
-		if (a.size() == 0) {
-			Attendance temp = new Attendance(a.size(), clas, c, d);
-			temp.addAttendance(sc.getStudent(u), mark);
-
-			a.add(temp);
-
-		} else {
-			for (Attendance p : a) {
-				if (p.equals(clas, c)) {
-					p.addAttendance(sc.getStudent(u), mark);
-					return true;
-				}
-			}
-			Attendance temp = new Attendance(a.size(), clas, c,d);
-			temp.addAttendance(sc.getStudent(u), mark);
-
-			a.add(temp);
-
-		}
-		return true;
-	}
-	
 	public void save() {
-		
-		String url = "/Users/Derrick/Documents/Programming/Java/CourseAllocation/Database/attendance.csv";
+		String url = "/Users/Derrick/Documents/Programming/Java/CourseAllocation/Database/norminalroll.csv";
 		try {
 			FileWriter writer = new FileWriter(url);
 
-			for (Attendance p : a) {
-				ArrayList<Student> keys = p.getKeys();
-				Map<Student, String> mapKey = p.getMap();
-				for (Student stu : keys) {
-					writer.append(p.getName() + "," + stu.getUser_id() + "," + p.getCourse() + "," + p.getdate() + "," + mapKey.get(stu));
+			for (String co : courseKeys) {
+				String classes = courseLink.get(co);
+				ArrayList<Student> students = classlink.get(classes);
+				for (Student k : students) {
+					writer.append(cc.getID(classes) + "," + k.getUser_id()
+							+ "," + coc.courseID(co));
 					writer.append("\n");
-				}
-			}
 
+				}
+
+			}
 
 			writer.flush();
 			writer.close();
@@ -166,10 +93,10 @@ public class NRController {
 		} catch (IOException e) {
 			System.err.println("Unable to save");
 		}
-	
-}
 
-	public void initData() {
+	}
+
+	private void initData() {
 		BufferedReader br = null;
 		try {
 
@@ -179,18 +106,51 @@ public class NRController {
 			String sCurrentLine;
 			br = new BufferedReader(
 					new FileReader(
-							"/Users/Derrick/Documents/Programming/Java/CourseAllocation/Database/attendance.csv"));
+							"/Users/Derrick/Documents/Programming/Java/CourseAllocation/Database/norminalroll.csv"));
 			while ((sCurrentLine = br.readLine()) != null) {
 				String[] temp = sCurrentLine.split(",");
-
-				// System.out.println(temp[0] + " " + temp[1] + " " + temp[2]);
+				// check if the numbers are integer.
 				if (isInteger(temp[0]) && isInteger(temp[1])
 						&& isInteger(temp[2])) {
-					tabulate(Integer.parseInt(temp[0]),
-							Integer.parseInt(temp[1]),
-							Integer.parseInt(temp[2]), temp[3], temp[4]);
+					String clas = cc.getClas(Integer.parseInt(temp[0]));
+					Student stu = sc.getStudent(Integer.parseInt(temp[1]));
+					String course = coc.getCourse(Integer.parseInt(temp[2]))
+							.getName();
+					boolean studex = false;
+					ArrayList<Student> stud;
+					//check if student can be found in class
+					if (classlink.containsKey(clas)) {
+						stud = classlink.get(clas);
+						for (Student s : stud) {
+							if (sc.checkStu(s, stu)) {
+								studex = true;
+								break;
+							}
+						}
+						if (!studex) {
+							stud.add(stu);
+							classlink.remove(clas);
+							classlink.put(clas, stud);
+						}
+					} else {
+						stud = new ArrayList<Student>();
+						stud.add(stu);
+						classkeys.add(clas);
+						classlink.put(clas, stud);
+					}
+					
+					
+					if (courseLink.containsKey(course)) {
+						String tempclas = courseLink.get(course);
+						if (!tempclas.equals(clas)) {
+							courseLink.put(course, clas);
+						}
+					
+					} else {
+						courseKeys.add(course);
+						courseLink.put(course, clas);
+					}
 				}
-
 			}
 
 		} catch (IOException e) {
@@ -205,8 +165,6 @@ public class NRController {
 			}
 		}
 	}
-	
-
 
 	public static boolean isInteger(String str) {
 		int size = str.length();
@@ -219,5 +177,4 @@ public class NRController {
 
 		return size > 0;
 	}
-
 }

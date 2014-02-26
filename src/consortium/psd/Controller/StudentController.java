@@ -27,6 +27,19 @@ public class StudentController {
 		return null;
 	}
 	
+	public boolean checkStu(Student stu , Student st) {
+		return stu.getUser_id() == st.getUser_id();
+	}
+	
+	public boolean checkStu(Student stu, int id) {
+		for (Student k : s) {
+			if (k.getUser_id() == id) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void initData() {
 		BufferedReader br = null;
 		try {

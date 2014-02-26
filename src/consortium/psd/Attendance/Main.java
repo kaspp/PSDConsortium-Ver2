@@ -2,13 +2,13 @@ package consortium.psd.Attendance;
 
 import java.util.Scanner;
 
-import consortium.psd.Controller.NRController;
+import consortium.psd.Controller.AttendanceController;
 import consortium.psd.Database.Database;
 import consortium.psd.Object.User;
 
 public class Main {
 
-	static NRController nc = new NRController();
+	static AttendanceController nc = new AttendanceController();
 	static Scanner sc = new Scanner(System.in);
 	private static User u;
 	private static boolean exit = false;

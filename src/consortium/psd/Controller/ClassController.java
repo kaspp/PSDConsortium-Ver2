@@ -29,6 +29,7 @@ public class ClassController {
 		save();
 	}
 	
+	
 	public String getClas(int id) {
 		for (Classes p : c) {
 			if (p.getId() == id) {
@@ -40,6 +41,15 @@ public class ClassController {
 	
 	public ArrayList<Classes> toArray() {
 		return c;
+	}
+	
+	public int getID(String name) {
+		for (Classes p : c) {
+			if (p.getName().equals(name)) {
+				return p.getId();
+			}
+		}
+		return 0;
 	}
 	
 	public void save() {
