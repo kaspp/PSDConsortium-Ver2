@@ -19,7 +19,7 @@ public class ClassController {
 	
 	public void viewClasses() {
 		for (Classes a : c) {
-			System.out.println(c.indexOf(a) + " " +a.getName());
+			System.out.println(a.getId() + ". \t" +a.getName());
 		}
 	}
 	
@@ -50,6 +50,15 @@ public class ClassController {
 			}
 		}
 		return 0;
+	}
+	
+	public boolean contains(int id) {
+		for (Classes p : c) {
+			if (p.getId() == id) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void save() {

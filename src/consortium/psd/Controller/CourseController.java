@@ -21,6 +21,15 @@ public class CourseController {
 		c.add(temp);
 		save();
 	}
+	
+	public boolean contains(int id) {
+		for (Course p : c) {
+			if (p.getId() == id) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void editCourse(int id, String name, String type) {
 		for (Course p : c) {

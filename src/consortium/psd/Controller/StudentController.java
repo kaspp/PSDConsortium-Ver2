@@ -18,6 +18,21 @@ public class StudentController {
 		return s;
 	}
 	
+	public void printAllStudent() {
+		for (Student st : s) {
+			System.out.println(st.getUser_id() + ":\t " + st.getFullname());
+		}
+	}
+	
+	public boolean contains(int id) {
+		for (Student st: s) {
+			if (st.getUser_id() == id) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public Student getStudent(int id) {
 		for (Student st : s) {
 			if (st.getUser_id() == id) {

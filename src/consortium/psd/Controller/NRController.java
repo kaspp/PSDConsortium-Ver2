@@ -18,20 +18,76 @@ public class NRController {
 	CourseController coc = new CourseController();
 	ArrayList<String> classkeys = new ArrayList<String>();
 	ArrayList<String> courseKeys = new ArrayList<String>();
-	Map<String, ArrayList<Student>> classlink = new LinkedHashMap<String, ArrayList<Student>>();
 
-	Map<String, String> courseLink = new LinkedHashMap<String, String>();
+	// Map the class name to the list.
+	Map<String, ArrayList<Student>> classlink = new LinkedHashMap<String, ArrayList<Student>>();
+	// Map the course to the class list.
+	Map<String, ArrayList<String>> courseClass = new LinkedHashMap<String, ArrayList<String>>();
 
 	public NRController() {
 		initData();
 	}
 
-	public void createNewClass(int clas_id, ArrayList<Student> st, int cour_id) {
+	public void insertToClass(int cid, int sid) {
+		ArrayList<Student> temp = classlink.get(cc.getClas(cid));
+		classlink.remove(cc.getClas(cid));
+		temp.add(sc.getStudent(sid));
+		classlink.put(cc.getClas(cid), temp);
+	}
+
+	public void createNewClassList(int clas_id, ArrayList<Student> st,
+			int cour_id) {
 		String cla = cc.getClas(clas_id);
 		classkeys.add(cla);
 		classlink.put(cla, st);
 		courseKeys.add(coc.getCourse(cour_id).getName());
-		courseLink.put(coc.getCourse(cour_id).getName(), cla);
+		// courseLink.put(coc.getCourse(cour_id).getName(), cla);
+
+		ArrayList<String> classes = new ArrayList<String>();
+		classes.add(cla);
+		courseClass.put(coc.getCourse(cour_id).getName(), classes);
+		save();
+	}
+
+	public ArrayList<Student> getClass(int clas_id) {
+		ArrayList<Student> temp = classlink.get(cc.getClas(clas_id));
+
+		return temp;
+
+	}
+
+	public void printClass(int clas_id) {
+		ArrayList<Student> temp = getClass(clas_id);
+		if (classkeys.contains(cc.getClas(clas_id))) {
+			for (Student k : temp) {
+				System.out.println(k.getUser_id() + " :\t" + k.getFullname());
+			}
+		} else {
+			System.err.println("Class does not exist");
+		}
+
+	}
+
+	public ArrayList<String> getAllClass(int cou_id) {
+		ArrayList<String> temp = courseClass.get(coc.getCourse(cou_id)
+				.getName());
+		return temp;
+	}
+
+	public void printAllClass(int cou_id) {
+
+		ArrayList<String> temp = getAllClass(cou_id);
+		// System.out.println(temp.size() + "");
+		
+			for (String k : temp) {
+				if (k == null || k.equals("") || k.equals("null")) {
+					System.out.println("There are not class tag to this course");
+				}
+				else {
+					System.out.println(k);
+				}
+			}
+		
 
 	}
 
@@ -52,18 +108,20 @@ public class NRController {
 
 	public void print() {
 		System.out.println("Print");
+
 		for (String co : courseKeys) {
 
-			String classes = courseLink.get(co);
-			ArrayList<Student> students = classlink.get(classes);
-			for (Student k : students) {
+			ArrayList<String> classes = courseClass.get(co);
 
-				System.out.println(classes + "," + k.getFullname()
-						+ "," + co);
-				
+			for (String c : classes) {
+				ArrayList<Student> students = classlink.get(c);
+				for (Student k : students) {
 
+					System.out.println(c + "," + k.getFullname() + "," + co);
+
+				}
 			}
-			
+
 			System.out.println();
 
 		}
@@ -76,12 +134,16 @@ public class NRController {
 			FileWriter writer = new FileWriter(url);
 
 			for (String co : courseKeys) {
-				String classes = courseLink.get(co);
-				ArrayList<Student> students = classlink.get(classes);
-				for (Student k : students) {
-					writer.append(cc.getID(classes) + "," + k.getUser_id()
-							+ "," + coc.courseID(co));
-					writer.append("\n");
+				ArrayList<String> classes = courseClass.get(co);
+
+				for (String c : classes) {
+					ArrayList<Student> students = classlink.get(c);
+
+					for (Student k : students) {
+						writer.append(cc.getID(c) + "," + k.getUser_id() + ","
+								+ coc.courseID(co));
+						writer.append("\n");
+					}
 
 				}
 
@@ -118,7 +180,7 @@ public class NRController {
 							.getName();
 					boolean studex = false;
 					ArrayList<Student> stud;
-					//check if student can be found in class
+					// check if student can be found in class
 					if (classlink.containsKey(clas)) {
 						stud = classlink.get(clas);
 						for (Student s : stud) {
@@ -138,17 +200,21 @@ public class NRController {
 						classkeys.add(clas);
 						classlink.put(clas, stud);
 					}
-					
-					
-					if (courseLink.containsKey(course)) {
-						String tempclas = courseLink.get(course);
-						if (!tempclas.equals(clas)) {
-							courseLink.put(course, clas);
+
+					if (courseClass.containsKey(course)) {
+						ArrayList<String> tempclas = courseClass.get(course);
+						if (!tempclas.contains(clas)) {
+							tempclas.add(clas);
+							courseClass.remove(course);
+							courseClass.put(course, tempclas);
+
 						}
-					
+
 					} else {
+						ArrayList<String> tempclas = new ArrayList<String>();
+						tempclas.add(clas);
 						courseKeys.add(course);
-						courseLink.put(course, clas);
+						courseClass.put(course, tempclas);
 					}
 				}
 			}
