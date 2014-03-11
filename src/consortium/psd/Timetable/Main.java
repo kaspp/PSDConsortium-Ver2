@@ -108,6 +108,10 @@ public class Main {
 					}
 				}
 				break;
+				
+			case 5:
+				tc.checkClash();
+				break;
 
 			case 0:
 				exit = true;
@@ -233,6 +237,7 @@ public class Main {
 			System.out.println("2.\t Add Timetable Slot");
 			System.out.println("3.\t Edit Timetable Slot");
 			System.out.println("4.\t Delete Timetable");
+			System.out.println("5.\t Check for clashes");
 			System.out.println("0.\t Logout");
 
 		} else if (type.equals("lecturer")) {

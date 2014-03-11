@@ -53,6 +53,32 @@ public class TimetableController {
 		}
 	}
 
+	public void checkClash() {
+		boolean clash = false;
+		for (int i = 0; i < tt.size(); i++) {
+			for (int j = 0; j < tt.size(); j++) {
+				if (i != j) {
+					if (tt.get(i).getDate().equals(tt.get(j).getDate())) {
+						if (tt.get(i).getStart_time()
+								.equals(tt.get(j).getStart_time())) {
+							System.out.println("Time Clash between "
+									+ coc.getCourse(tt.get(i).getCourse_id())
+									+ " at " + tt.get(i).getStart_time()
+									+ " and "
+									+ coc.getCourse(tt.get(j).getCourse_id())
+									+ " at " + tt.get(j).getStart_time());
+							clash = true;
+						}
+					}
+				}
+			}
+		}
+		if (clash) 
+			System.out.println("Please edit the clashed timetable. Thank you!");
+		else 
+			System.out.println("There is no clash in the course.");
+	}
+
 	public void viewTt() {
 		for (Timetable t : tt) {
 			System.out.println(t.getTimetable_id() + ".\t"
@@ -249,10 +275,10 @@ public class TimetableController {
 		save();
 
 	}
-	
+
 	public boolean editTt(int id) {
 		boolean isint = false;
-		
+
 		Timetable t = new Timetable();
 		boolean found = false;
 		for (Timetable ti : tt) {
@@ -265,7 +291,7 @@ public class TimetableController {
 		if (!found) {
 			return false;
 		}
-		
+
 		Room rm = null;
 		String ans;
 
@@ -447,7 +473,7 @@ public class TimetableController {
 		tt.add(t);
 		System.out.println("Time Slot added");
 		save();
-		
+
 		return true;
 
 	}
@@ -460,8 +486,7 @@ public class TimetableController {
 		}
 		return false;
 	}
-	
-	
+
 	public void removeTt(int id) {
 		for (Timetable t : tt) {
 			if (t.getTimetable_id() == id) {
@@ -471,7 +496,6 @@ public class TimetableController {
 		}
 		save();
 	}
-
 
 	public void save() {
 		String url = "/Users/Derrick/Documents/Programming/Java/CourseAllocation/Database/timetable.csv";
@@ -509,7 +533,7 @@ public class TimetableController {
 					new FileReader(
 							"/Users/Derrick/Documents/Programming/Java/CourseAllocation/Database/timetable.csv"));
 			while ((sCurrentLine = br.readLine()) != null) {
-				
+
 				String[] temp = sCurrentLine.split(",");
 
 				if (isInteger(temp[0]) && isInteger(temp[1])
